@@ -8,10 +8,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <linux/netlink.h>
+#include <string.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <signal.h>
+#include <poll.h>
+#include <unistd.h>
 
-static void die (char *s)
+static void die(char *s)
 {
-    write(2, s strlen(s));
+    write(2, s, strlen(s));
     exit(1);
 }
 
@@ -24,7 +31,7 @@ int main(int argc, char *argv[])
     memset(&nls, 0, sizeof(struct sockaddr_nl));
     nls.nl_family = AF_NETLINK;
     nls.nl_pid = getpid();
-    nls.nl_group = -1;
+    nls.nl_groups = -1;
 
     pfd.events = POLLIN;
     pfd.fd = socket(PF_NETLINK, SOCK_DGRAM, NETLINK_KOBJECT_UEVENT);
