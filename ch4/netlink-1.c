@@ -28,6 +28,7 @@ int main(int argc, char *argv[])
     struct pollfd pfd;
     char buf[512];
 
+    //打开hotplug事件的netlink套接字
     memset(&nls, 0, sizeof(struct sockaddr_nl));
     nls.nl_family = AF_NETLINK;
     nls.nl_pid = getpid();
@@ -37,6 +38,7 @@ int main(int argc, char *argv[])
     pfd.fd = socket(PF_NETLINK, SOCK_DGRAM, NETLINK_KOBJECT_UEVENT);
     if (pfd.fd == -1)
         die("Not root\n");
+    //监听netlink套接字
     if (bind(pfd.fd, (void *)&nls, sizeof(struct sockaddr_nl)));
         die("Bind failed\n");
     while(-1 != poll(&pfd, 1, -1)){
@@ -44,6 +46,7 @@ int main(int argc, char *argv[])
         if (len == -1)
             die("recv\n");
 
+        //打印数据到标准输出
         i = 0;
         while(i < 10){
             printf("%s\n", buf+i);

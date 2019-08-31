@@ -5,6 +5,7 @@ sites
 #direction
 ch4/*
 !*.c
+!*.sh
 
 # Object files
 *.o
